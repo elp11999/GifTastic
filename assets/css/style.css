@@ -7,6 +7,18 @@ body {
     margin: 0;
 }
 
+.topics-header,
+.images-header,
+.new-topic-header {
+    background-color: #4aaaa5;
+    font-weight: bold;
+    color:#fff;   
+    width: 100%;
+    padding: 5px 0;
+    text-align: center;
+    font-size: 30px;
+}
+
 .topic-button {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -15,16 +27,24 @@ body {
     font-size: 20px;
 }
 
-.images {
+.image-area {
     width: 66%;
+    margin-right: 10px;
 }
 
-.userinput {
+.new-topic-area {
     width: 33%;
 }
 
-.images,
-.userinput {
+.images-header {
+    margin-bottom: 10px;
+}
+.new-topic-header {
+    margin-bottom: 10px;
+}
+
+.image-area,
+.new-topic-area {
     float: left;
 }
 
@@ -40,7 +60,6 @@ body {
  }
 
 .new-topic-label {
-    display: block;
     font-size: 25px;    
 }
 
@@ -57,14 +76,30 @@ body {
 
 .new-topic-button:hover,
 .topic-button:hover { 
-    background-color: #666666;
+    background-color: #4aaaa5;
     color: white;
- }
+}
+
+.topics-buttons,
+.images,
+.userinput {    
+    border: 1px solid #4aaaa5;
+    padding: 5px;
+}
+
+.topics-buttons {
+    margin: 5px 0;
+}
+
+.topic-button {
+    margin-top: 0;
+    margin-bottom: 0;
+}
 
 @media only screen and (max-width: 640px) {
 
-    .images,    
-    .userinput {
+    .image-area,
+    .new-topic-area,
         width: 50%;
     }
 }

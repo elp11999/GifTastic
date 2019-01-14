@@ -6,8 +6,8 @@ $(document).ready(function() {
 
     // List of topics for Giphy to query
     var topics = [
-        "dog",
-        "cat"
+        "dogs",
+        "cats"
     ];
 
 
@@ -25,7 +25,7 @@ $(document).ready(function() {
     //
 
     // Div to hold the topic buttons
-    var topicsDiv = $(".topics");
+    var topicsDiv = $(".topics-buttons");
 
     // Div to hold the topic images
     var imagesDiv = $(".images");
