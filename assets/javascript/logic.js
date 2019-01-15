@@ -10,20 +10,6 @@ $(document).ready(function() {
         "cats"
     ];
 
-
-    // data-still
-    // data-animate
-    // data-state
-    //   still
-    //   animate
-    //
-    // response.data[i].images.fixed_height.url
-    // https://media0.giphy.com/media/bbshzgyFQDqPHXBo4c/200.gif
-    //
-    // response.data[i].images.fixed_height_still.url
-    // https://media0.giphy.com/media/bbshzgyFQDqPHXBo4c/200_s.gif
-    //
-
     // Div to hold the topic buttons
     var topicsDiv = $(".topics-buttons");
 
@@ -71,6 +57,7 @@ $(document).ready(function() {
 
     // Call back function when a topic button is clicked
     function topicButtonClicked(event) {
+        $(".directions-area").hide();
         var topic = $(this).text();
         //console.log("Topic text=" + topic);
         
@@ -83,7 +70,11 @@ $(document).ready(function() {
                 //console.log(response.data[i].images.fixed_height_still.url);
                 addNewTopicImage(response.data[i]);
             }
-            $(".topic-image").click(topicImageClicked); 
+            $(".topic-image").click(topicImageClicked);
+            $(".image-area").show();            
+            $(".images").css("border", "1px solid #4aaaa5");
+            $(".clear-images-button").show();            
+            $(".clear-images-button").click(clearImagesButtonClicked);
         });
     };
     
@@ -104,6 +95,7 @@ $(document).ready(function() {
     // Call back function when the new topic button is clicked
     $(".new-topic-button").click(function(event) {
         event.preventDefault();
+        $(".directions-area").hide();
         var topic = $(".new-topic-input").val();
         if (topic.length === 0)
             return;
@@ -113,7 +105,16 @@ $(document).ready(function() {
         topics.push(topic);
         createTopicButtons();
         $(".new-topic-input").val("");
+        $(".image-area").show();
     });
+    
+    
+    // Call back function when a clear images button is clicked
+    function clearImagesButtonClicked(event) {
+        $(imagesDiv).html("");        
+        $(".clear-images-button").hide();
+        $(".images").css("border", "none");
+    };
 
     // Create list of topic buttons
     createTopicButtons();

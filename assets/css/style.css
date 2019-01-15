@@ -4,9 +4,21 @@
 body {
     font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
     background: url(../images/gravel.png); 
-    margin: 0;
+    margin: 0; 
 }
 
+.directions-text {
+    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 20px;
+    color: #777777;
+    line-height: 1.5;
+}
+
+.topics-header {
+    margin-top: 5px;
+}
+
+.directions-header,
 .topics-header,
 .images-header,
 .new-topic-header {
@@ -25,8 +37,15 @@ body {
     margin-right: 5px;
     border-radius: 5px;
     font-size: 20px;
+    color: #777777;
 }
 
+.image-area,
+.clear-images-button {
+    display: none;
+}
+
+.directions-area,
 .image-area {
     width: 66%;
     margin-right: 10px;
@@ -36,13 +55,16 @@ body {
     width: 33%;
 }
 
-.images-header {
-    margin-bottom: 10px;
-}
 .new-topic-header {
     margin-bottom: 10px;
 }
 
+.directions-header,
+.images-header {
+    margin-bottom: 10px;
+}
+
+.directions-area,
 .image-area,
 .new-topic-area {
     float: left;
@@ -60,26 +82,31 @@ body {
  }
 
 .new-topic-label {
-    font-size: 25px;    
+    font-size: 25px;
+    color: #777777;    
 }
 
 .new-topic-input {
-    display: block;
     width: 100%;
-}
-
-.new-topic-button {
-    margin: 10px 0;
-    border-radius: 2px;
     font-size: 20px;
 }
 
+.new-topic-button,
+.clear-images-button {
+    margin: 10px 0;
+    border-radius: 2px;
+    font-size: 20px;
+    color: #777777;
+}
+
 .new-topic-button:hover,
+.clear-images-button:hover,
 .topic-button:hover { 
     background-color: #4aaaa5;
     color: white;
 }
 
+.directions,
 .topics-buttons,
 .images,
 .userinput {    
@@ -96,10 +123,22 @@ body {
     margin-bottom: 0;
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 1200px) {
+    .directions-area {
+        width: 55%
+    }    
+    .image-area {
+        width: 55%
+    }    
+    .new-topic-area {
+        width: 43%;
+    }
+}
 
+@media only screen and (max-width: 640px) {
+    .directions-area,
     .image-area,
-    .new-topic-area,
-        width: 50%;
+    .new-topic-area {
+       width: 100%;
     }
 }
