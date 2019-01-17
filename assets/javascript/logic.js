@@ -3,12 +3,12 @@
 //
 $(document).ready(function() {
     console.log("GifTastic started...");
-
+    
     // List of topics for Giphy to query
-    var topics = [
-        "dogs",
-        "cats"
-    ];
+    if (localStorage.getItem("topics"))
+        var topics = JSON.parse(localStorage.getItem("topics"));
+    else
+        var topics = ["dogs", "cats"];
 
     // Div to hold the topic buttons
     var topicsDiv = $(".topics-buttons");
@@ -39,20 +39,32 @@ $(document).ready(function() {
             //console.log(topic);
             addNewTopic(topic);
         });
-        $(".topic-button").click(topicButtonClicked);          
+
+        $('.topic-button').mousedown(topicButtonClicked);
+        localStorage.setItem("topics", JSON.stringify(topics));          
     };
 
     // Function to add topic image to page
     function addNewTopicImage(data) {
+        //var topicImageDiv = $("<div>");
+        //topicImageDiv.addClass("topic-image-container");
+
         var topicImage = $("<img>");
         topicImage.attr("src", data.images.fixed_height_still.url);
         topicImage.attr("data-still", data.images.fixed_height_still.url);
         topicImage.attr("data-animate", data.images.fixed_height.url);
         topicImage.attr("data-state", "still");
         topicImage.attr("height", "150");
-        topicImage.attr("width", "150");
-        topicImage.addClass("topic-image"); 
+        topicImage.attr("width", "165");
+        topicImage.addClass("topic-image");
+
+        //topicImageDiv.append(topicImage);
+        //var topicData = $("<p><strong>" + "Rating: " + data.rating + "</strong></p>");
+        //topicImageDiv.append(topicData);
+        //$(imagesDiv).append(topicImageDiv);
+       
         $(imagesDiv).append(topicImage);
+        
     };
 
     // Call back function when a topic button is clicked
@@ -65,14 +77,14 @@ $(document).ready(function() {
             url: createGiphyQueryURL(topic),
             method: "GET"
           }).then(function(response) {
-            //console.log(response);
+            console.log(response);
             for (var i = 0; i < response.data.length; i++) {                
                 //console.log(response.data[i].images.fixed_height_still.url);
                 addNewTopicImage(response.data[i]);
             }
-            $(".topic-image").click(topicImageClicked);
-            $(".image-area").show();            
+            $(".topic-image").click(topicImageClicked);           
             $(".images").css("border", "1px solid #4aaaa5");
+            $(".image-area").show(); 
             $(".clear-images-button").show();            
             $(".clear-images-button").click(clearImagesButtonClicked);
         });
@@ -113,7 +125,8 @@ $(document).ready(function() {
     function clearImagesButtonClicked(event) {
         $(imagesDiv).html("");        
         $(".clear-images-button").hide();
-        $(".images").css("border", "none");
+        $(".images").css("border", "none");       
+        $(".image-area").hide();
     };
 
     // Create list of topic buttons

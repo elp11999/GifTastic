@@ -70,6 +70,7 @@ body {
 
 .directions-area,
 .image-area,
+.topic-image-container,
 .new-topic-area {
     float: left;
 }
