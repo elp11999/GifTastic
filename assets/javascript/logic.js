@@ -92,7 +92,7 @@ $(document).ready(function() {
                 $(".topic-images").css("border", "1px solid #4aaaa5");
             } else {
                 $(".error-message").text("No query results for that topic.");                
-                $(".topic-images").css("border", "none");
+                //$(".topic-images").css("border", "none");
             } 
             $(".image-area").show();               
             $(".topic-images").show(); 
