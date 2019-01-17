@@ -97,7 +97,8 @@ body {
 }
 
 .new-topic-button,
-.clear-images-button {
+.clear-images-button,
+.favorite-button {
     margin: 10px 0;
     border-radius: 2px;
     font-size: 20px;
@@ -106,7 +107,8 @@ body {
 
 .new-topic-button:hover,
 .clear-images-button:hover,
-.topic-button:hover { 
+.topic-button:hover,
+.favorite-button:hover { 
     background-color: #4aaaa5;
     color: white;
 }
