@@ -14,7 +14,7 @@ $(document).ready(function() {
     var topicsDiv = $(".topics-buttons");
 
     // Div to hold the topic images
-    var imagesDiv = $(".images");
+    var imagesDiv = $(".topic-images");
 
     // Giphy API key
     giphyApiKey = "dc6zaTOxFJmzC";    
@@ -46,8 +46,6 @@ $(document).ready(function() {
 
     // Function to add topic image to page
     function addNewTopicImage(data) {
-        //var topicImageDiv = $("<div>");
-        //topicImageDiv.addClass("topic-image-container");
 
         var topicImage = $("<img>");
         topicImage.attr("src", data.images.fixed_height_still.url);
@@ -58,41 +56,63 @@ $(document).ready(function() {
         topicImage.attr("width", "165");
         topicImage.addClass("topic-image");
 
-        //topicImageDiv.append(topicImage);
-        //var topicData = $("<p><strong>" + "Rating: " + data.rating + "</strong></p>");
-        //topicImageDiv.append(topicData);
+        var topicImageDiv = $("<div>");
+        topicImageDiv.addClass("topic-image-container");
+        topicImageDiv.append(topicImage);
+        var topicData = $("<p><strong>" + "Rating: " + data.rating + "</strong></p>");
+        topicImageDiv.append(topicData);
+
         //$(imagesDiv).append(topicImageDiv);
        
         $(imagesDiv).append(topicImage);
         
     };
 
-    // Call back function when a topic button is clicked
-    function topicButtonClicked(event) {
-        $(".directions-area").hide();
-        var topic = $(this).text();
-        //console.log("Topic text=" + topic);
+    // Function to retrieve images from server
+    function getImages(topic) {
         
         $.ajax({
             url: createGiphyQueryURL(topic),
             method: "GET"
           }).then(function(response) {
             console.log(response);
-            for (var i = 0; i < response.data.length; i++) {                
-                //console.log(response.data[i].images.fixed_height_still.url);
-                addNewTopicImage(response.data[i]);
-            }
-            $(".topic-image").click(topicImageClicked);           
-            $(".images").css("border", "1px solid #4aaaa5");
-            $(".image-area").show(); 
-            $(".clear-images-button").show();            
-            $(".clear-images-button").click(clearImagesButtonClicked);
+
+            if (response.data.length > 0) {
+                for (var i = 0; i < response.data.length; i++) {                
+                    //console.log(response.data[i].images.fixed_height_still.url);
+                    addNewTopicImage(response.data[i]);
+                }
+                $(".topic-image").click(topicImageClicked);   
+                $(".clear-images-button").show();            
+                $(".clear-images-button").click(clearImagesButtonClicked);
+
+                if (!topics.includes(topic))
+                    topics.push(topic);
+                createTopicButtons();       
+                $(".topic-images").css("border", "1px solid #4aaaa5");
+            } else {
+                $(".error-message").text("No query results for that topic.");                
+                $(".topic-images").css("border", "none");
+            } 
+            $(".image-area").show();               
+            $(".topic-images").show(); 
         });
+
+    };
+
+    // Call back function when a topic button is clicked
+    function topicButtonClicked(event) {
+        $(".error-message").text("");
+        $(".directions-area").hide();
+        var topic = $(this).text();
+        //console.log("Topic text=" + topic);
+        getImages(topic);
     };
     
     // Call back function when a topic image is clicked
     function topicImageClicked(event) {
         var dataState;
+        $(".error-message").text("");
         dataState = $(this).attr("data-state");
         //console.log("data-state=" + dataState);
         if (dataState === "still") {            
@@ -107,26 +127,30 @@ $(document).ready(function() {
     // Call back function when the new topic button is clicked
     $(".new-topic-button").click(function(event) {
         event.preventDefault();
-        $(".directions-area").hide();
+        $(".error-message").text("");
         var topic = $(".new-topic-input").val();
-        if (topic.length === 0)
+        if (topic.length === 0) {            
+            $(".error-message").text("Please enter a topic.");
             return;
-        if (topics.includes(topic))
-            return;
-        //console.log("Topic text=" + topic);
-        topics.push(topic);
-        createTopicButtons();
+        }
         $(".new-topic-input").val("");
-        $(".image-area").show();
+        if (topics.includes(topic)) {          
+            $(".error-message").text("Topic " + "\"" + topic + "\"" + " already exists.");
+            return;
+        }
+        $(".directions-area").hide();
+        //console.log("Topic text=" + topic);
+        getImages(topic);
     });
     
     
     // Call back function when a clear images button is clicked
     function clearImagesButtonClicked(event) {
+        $(".error-message").text("");
         $(imagesDiv).html("");        
         $(".clear-images-button").hide();
-        $(".images").css("border", "none");       
-        $(".image-area").hide();
+        $(".topic-images").css("border", "none");
+        $(".topic-images").hide();
     };
 
     // Create list of topic buttons
