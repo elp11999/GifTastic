@@ -4,17 +4,15 @@
 $(document).ready(function() {
     console.log("GifTastic started...");
     
-    // List of topics for Giphy to query
-    if (localStorage.getItem("topics"))
-        var topics = JSON.parse(localStorage.getItem("topics"));
-    else
+    // List of topics
+    if (localStorage.getItem("favoriteTopics")) {
+        var topics = JSON.parse(localStorage.getItem("favoriteTopics"));
+        var favoriteTopics = JSON.parse(localStorage.getItem("favoriteTopics"));
+    }
+    else {
         var topics = ["dogs", "cats"];
-    
-    // List of favorite topics for Giphy to query
-    if (localStorage.getItem("favorites"))
-        var topics = JSON.parse(localStorage.getItem("favorites"));
-    else
-        var favorites = [];
+        var favoriteTopics = [];
+    }
 
     // Div to hold the topic buttons
     var topicsDiv = $(".topics-buttons");
@@ -32,22 +30,36 @@ $(document).ready(function() {
 
     // Function to add topic buttons to page
     function addNewTopic(topic) {
+
+        var buttonContainer = $("<div>");
+        $(buttonContainer).addClass("button-container");
         var topicButton = $("<button>");
         topicButton.text(topic);
         topicButton.addClass("topic-button"); 
-        $(topicsDiv).append(topicButton);
+        $(buttonContainer).append(topicButton);
+
+        if (favoriteTopics.includes(topic)) {  
+            var favoriteImg = $("<img>");
+            $(favoriteImg).addClass("favorite-topic-img");
+            $(favoriteImg).attr("src", "assets/images/favorite.png");
+            $(favoriteImg).attr("alt", "favorite.png");
+            $(buttonContainer).append(favoriteImg);
+        }
+        
+        $(topicsDiv).append(buttonContainer);
     };
 
-    // Function to create initial list of topic buttons
+    // Function to create list of topic buttons
     function createTopicButtons() {
         $(topicsDiv).empty();
-        topics.forEach(function(topic) {
-            //console.log(topic);
-            addNewTopic(topic);
-        });
-
-        $('.topic-button').mousedown(topicButtonClicked);
-        localStorage.setItem("topics", JSON.stringify(topics));          
+        if (topics.length > 0) {
+            topics.forEach(function(topic) {
+                //console.log(topic);
+                addNewTopic(topic);
+            });
+            $(".topics-buttons").css("border", "1px solid #4aaaa5");
+        }
+        $('.topic-button').mousedown(topicButtonClicked);        
     };
 
     // Function to add topic image to page
@@ -69,8 +81,6 @@ $(document).ready(function() {
         topicImageDiv.append(topicData);
 
         $(imagesDiv).append(topicImageDiv);
-       
-        //$(imagesDiv).append(topicImage);
         
     };
 
@@ -97,8 +107,7 @@ $(document).ready(function() {
                 createTopicButtons();       
                 $(".topic-images").css("border", "1px solid #4aaaa5");
             } else {
-                $(".error-message").text("No query results for that topic.");                
-                //$(".topic-images").css("border", "none");
+                $(".error-message").text("No query results for that topic.");  
             } 
             $(".image-area").show();               
             $(".topic-images").show(); 
@@ -143,11 +152,11 @@ $(document).ready(function() {
             $(".error-message").text("Topic " + "\"" + topic + "\"" + " already exists.");
             return;
         }
-        $(".directions-area").hide();
+        $(".directions-area").hide();        
+        $(".favorite-button").show();
         //console.log("Topic text=" + topic);
         getImages(topic);
-    });
-    
+    });    
     
     // Call back function when a clear images button is clicked
     function clearImagesButtonClicked(event) {
@@ -158,18 +167,54 @@ $(document).ready(function() {
         $(".topic-images").hide();
     };
 
-              
+    // Function to check for candidates to be a favorite topic
+    function checkForAvailableFavoriteTopics() {
+        var count = 0;
+
+        topics.forEach(function(topic) {
+            console.dir(topic);
+            if (!favoriteTopics.includes(topic)) {
+                count++;
+            }
+        });
+
+        return (count == 0) ? false : true;
+    }
+
+    // Call back function when a favorite choice is clicked
+    function favoriteChoiceClicked(event) {
+        var topic = $(this).text();
+        console.log("favoriteChoiceClicked: clicked for " + topic);
+        
+        if (!favoriteTopics.includes(topic)) {    
+            favoriteTopics.push(topic);        
+            localStorage.setItem("favoriteTopics", JSON.stringify(favoriteTopics));
+            if (!checkForAvailableFavoriteTopics())
+                $(".favorite-button").hide();                
+            createTopicButtons();
+        }
+    }
+
+    // Call back function when the favorite button is clicked                  
     $(".favorite-button").click(function(event) {
         $(".error-message").text("");
         $("#myDropdown").html("");
         topics.forEach(function(topic) {
-            var anchor = $("<a href=#" + topic + "\>" + topic + "</a>");
-            console.dir(topic);
-            $("#myDropdown").append(anchor);
+            if (!favoriteTopics.includes(topic)) {   
+                var anchor = $("<a>");
+                $(anchor).addClass("favorite-choice");
+                $(anchor).attr("href", "#" + topic);
+                $(anchor).text(topic);
+                $(anchor).addClass("favorite-choice");
+                $("#myDropdown").append(anchor);
+                console.dir(topic);
+            }
         });
+        $(".favorite-choice").click(favoriteChoiceClicked);   
         document.getElementById("myDropdown").classList.toggle("show");
     });
     
+    // Call back function to hide the drop down list 
     window.onclick = function(event) {
       if (!event.target.matches('.dropbtn')) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -184,4 +229,8 @@ $(document).ready(function() {
 
     // Create list of topic buttons
     createTopicButtons();
+    
+    // Check for candidates to be a favorite topic
+    if (!checkForAvailableFavoriteTopics())
+        $(".favorite-button").hide();
 });

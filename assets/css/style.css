@@ -167,6 +167,32 @@ body {
 
 .show {display: block;}
 
+.button-container {
+    display: inline-block;
+    position: relative;
+}
+
+.favorite-topic-img {
+    display: block;
+    position: absolute;
+    
+    /*
+    top: 2px;
+    left: 2px;
+    */
+    
+
+    top: 2px;
+    right: 8px;
+ 
+
+    /*
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    */
+}
+
 @media only screen and (max-width: 1200px) {
     .directions-area {
         width: 55%
