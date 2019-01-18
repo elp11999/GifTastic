@@ -89,9 +89,12 @@ $(document).ready(function() {
         
         $.ajax({
             url: createGiphyQueryURL(topic),
-            method: "GET"
+            method: "GET",
+            error: function (jqXHR, textStatus, errorThrown) {                
+                $(".error-message").text("Query request failed.");
+            }
           }).then(function(response) {
-            console.log(response);
+            //console.log(response);
 
             if (response.data.length > 0) {
                 for (var i = 0; i < response.data.length; i++) {                
@@ -172,7 +175,7 @@ $(document).ready(function() {
         var count = 0;
 
         topics.forEach(function(topic) {
-            console.dir(topic);
+            //console.dir(topic);
             if (!favoriteTopics.includes(topic)) {
                 count++;
             }
@@ -184,7 +187,7 @@ $(document).ready(function() {
     // Call back function when a favorite choice is clicked
     function favoriteChoiceClicked(event) {
         var topic = $(this).text();
-        console.log("favoriteChoiceClicked: clicked for " + topic);
+        //console.log("favoriteChoiceClicked: clicked for " + topic);
         
         if (!favoriteTopics.includes(topic)) {    
             favoriteTopics.push(topic);        
