@@ -9,6 +9,12 @@ $(document).ready(function() {
         var topics = JSON.parse(localStorage.getItem("topics"));
     else
         var topics = ["dogs", "cats"];
+    
+    // List of favorite topics for Giphy to query
+    if (localStorage.getItem("favorites"))
+        var topics = JSON.parse(localStorage.getItem("favorites"));
+    else
+        var favorites = [];
 
     // Div to hold the topic buttons
     var topicsDiv = $(".topics-buttons");
@@ -54,17 +60,17 @@ $(document).ready(function() {
         topicImage.attr("data-state", "still");
         topicImage.attr("height", "150");
         topicImage.attr("width", "165");
-        topicImage.addClass("topic-image");
+        topicImage.addClass("topic-image cfix");
 
         var topicImageDiv = $("<div>");
-        topicImageDiv.addClass("topic-image-container");
+        topicImageDiv.addClass("topic-image-container cfix");
         topicImageDiv.append(topicImage);
         var topicData = $("<p><strong>" + "Rating: " + data.rating + "</strong></p>");
         topicImageDiv.append(topicData);
 
-        //$(imagesDiv).append(topicImageDiv);
+        $(imagesDiv).append(topicImageDiv);
        
-        $(imagesDiv).append(topicImage);
+        //$(imagesDiv).append(topicImage);
         
     };
 
@@ -97,7 +103,6 @@ $(document).ready(function() {
             $(".image-area").show();               
             $(".topic-images").show(); 
         });
-
     };
 
     // Call back function when a topic button is clicked
@@ -152,6 +157,30 @@ $(document).ready(function() {
         $(".topic-images").css("border", "none");
         $(".topic-images").hide();
     };
+
+              
+    $(".favorite-button").click(function(event) {
+        $(".error-message").text("");
+        $("#myDropdown").html("");
+        topics.forEach(function(topic) {
+            var anchor = $("<a href=#" + topic + "\>" + topic + "</a>");
+            console.dir(topic);
+            $("#myDropdown").append(anchor);
+        });
+        document.getElementById("myDropdown").classList.toggle("show");
+    });
+    
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (var i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
 
     // Create list of topic buttons
     createTopicButtons();
